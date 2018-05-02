@@ -298,8 +298,12 @@ var CubeTest = function(type) {
     var count = 0;
     var angle = 0;
     var ar = [];
+    var start = 0;
     var loop = function() {
-      var start = performance.now();
+                 var prestart = start;
+      start = performance.now();
+      ar.push(start - prestart);
+      // console.log(ar);
       var frame = requestAnimationFrame(loop);
       angle = count++ / 20;
       mat4.rotate(yRotationMatrix, identityMatrix, angle, [ 0, 1, 0 ]);
@@ -310,13 +314,13 @@ var CubeTest = function(type) {
       //    gl.clearColor(1.0, 1.0, 1.0, 1.0);
       gl.clear(gl.DEPTH_BUFFER_BIT | gl.COLOR_BUFFER_BIT);
       gl.drawElements(gl.TRIANGLES, boxIndices.length, gl.UNSIGNED_SHORT, 0);
-            var end = performance.now();
-            ar.push(end-start);
+
       if (count == 20) {
+                console.log("output",ar)
         sender.getData(canvas, ID);
         cancelAnimationFrame(frame);
         cb(level);
-        console.log("output",ar)
+
       }
 
     };

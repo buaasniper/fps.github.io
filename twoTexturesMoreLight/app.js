@@ -223,8 +223,11 @@ var TwoTexturesMoreLightTest = function(vertices, indices, texCoords, normals, t
       mat4.identity(identityMatrix);
       gl.enable(gl.DEPTH_TEST);
       var ar = [];
+          var start = 0;
       var loop = function() {        
-        var start = performance.now();
+      var prestart = start;
+      start = performance.now();
+      ar.push(start - prestart);
           var frame = requestAnimationFrame(loop);
         angle = count++ / 20;
         mat4.rotate(yRotationMatrix, identityMatrix, angle, [ 0, 1, 0 ]);
@@ -240,8 +243,7 @@ var TwoTexturesMoreLightTest = function(vertices, indices, texCoords, normals, t
         gl.bindTexture(gl.TEXTURE_2D, textures[1]);
         gl.activeTexture(gl.TEXTURE1);
         gl.drawElements(gl.TRIANGLES, indices.length, gl.UNSIGNED_SHORT, 0);
-        var end = performance.now();
-        ar.push(end - start);
+
         if (count == 55) {
           console.log(ar)
           cancelAnimationFrame(frame);

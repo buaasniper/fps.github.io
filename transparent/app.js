@@ -7,7 +7,7 @@ var TransparentTest = function (vertices, indices, texCoords, normals, texture) 
     this.canvas = null;
     this.cb = null;
     this.level = null;
-    this.numChildren = 8;
+    this.numChildren = 1;
     this.children = [];
     this.IDs = sender.getIDs(this.numChildren);
     this.numChildrenRun = 0;
@@ -210,8 +210,11 @@ var TransparentTest = function (vertices, indices, texCoords, normals, texture) 
                 gl.clear(gl.DEPTH_BUFFER_BIT | gl.COLOR_BUFFER_BIT);
                 //ctx.font = "48px";
                 var ar = [];
+                var start = 0;
                 var loop = function () {
-                            var start = performance.now();
+      var prestart = start;
+      start = performance.now();
+      ar.push(start - prestart);
                     var frame = requestAnimationFrame(loop);
                     angle = count++ / 20;
                     mat4.rotate(yRotationMatrix, identityMatrix, angle, [0, 1, 0]);
@@ -224,8 +227,8 @@ var TransparentTest = function (vertices, indices, texCoords, normals, texture) 
                     gl.activeTexture(gl.TEXTURE0);
                     gl.drawElements(gl.TRIANGLES, indices.length, gl.UNSIGNED_SHORT, 0);
                     //ctx.fillText("Hello world", 9, 50);
-        var end = performance.now();
-        ar.push(end - start);
+        // var end = performance.now();
+        // ar.push(end - start);
                     if(count == 50){
                         console.log(ar)
                         cancelAnimationFrame(frame);

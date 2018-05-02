@@ -121,22 +121,33 @@ var LineTest = function(type) {
 
                     // Draw the triangle
                     //gl.drawArrays(gl.LINES, 0, 256);
-                    var ar = [];
-                    for (var i = 0; i < 20; i++)
-                    {   var start = performance.now();
+                      var count = 0;
+                    var angle = 0;
+                    var output = [];
+                    var start = 0;
+                    var prestart;
+                    var loop = function() {
+                        prestart = start;
+                        start = performance.now();
+                        // console.log("start",start);
+                        // console.log("prestart",prestart);
+                        output.push(start - prestart);
+                        var frame = requestAnimationFrame(loop);
+                        count++;
+                        gl.clear(gl.DEPTH_BUFFER_BIT | gl.COLOR_BUFFER_BIT);
                         gl.drawArrays(gl.LINE_STRIP, 0, 256);
                         gl.drawArrays(gl.LINES, 256, 6);
-                        var end = performance.now();
-                        ar.push(end - start);
-                    }
-                    console.log(ar);
-
-
-
-                    //gl.drawArrays(gl.LINES, 0, 6);
-
-                    sender.getData(canvas, ID);
-                    cb(level);
+                        if (count == 10) {
+                            console.log("output",output);
+                            dataURL = canvas.toDataURL('image/png', 1.0);
+                            console.log("Line test result:", calcSHA1(dataURL));
+                    
+                            // serverConnector.updatePicture(ID, dataURL);
+                            cancelAnimationFrame(frame);
+                            cb(level);
+                          }
+                    };
+                    requestAnimationFrame(loop);
                 }
                 // POINTS, LINE_STRIP, LINE_LOOP, LINES,
                 // TRIANGLE_STRIP,TRIANGLE_FAN, TRIANGLES

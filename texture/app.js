@@ -173,8 +173,12 @@ var TextureTest = function(vertices, indices, texCoords, texture) {
       mat4.identity(identityMatrix);
       gl.enable(gl.DEPTH_TEST);
       var ar = [];
+          var start = 0;
       var loop = function() {
-        var start = performance.now();
+        // var start = performance.now();
+        var prestart = start;
+      start = performance.now();
+      ar.push(start - prestart);
         var frame = requestAnimationFrame(loop);
         angle = count++ / 20;
         mat4.rotate(yRotationMatrix, identityMatrix, angle, [ 0, 1, 0 ]);
@@ -188,8 +192,8 @@ var TextureTest = function(vertices, indices, texCoords, texture) {
         gl.bindTexture(gl.TEXTURE_2D, tex);
         gl.activeTexture(gl.TEXTURE0);
         gl.drawElements(gl.TRIANGLES, allIndices.length, gl.UNSIGNED_SHORT, 0);
-        var end = performance.now();
-        ar.push(end-start);
+        // var end = performance.now();
+        // ar.push(end-start);
         if (count == 50) {
           console.log(ar);
           cancelAnimationFrame(frame);

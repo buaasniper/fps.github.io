@@ -307,10 +307,13 @@ var CameraTest = function() {
 
         var count = 0;
         var angle = 0;
-        var ar = []
+        var ar = [];
+            var start = 0;
         var loop = function() {
-            var start = performance.now();
+                  var prestart = start;
+      start = performance.now();
             var frame = requestAnimationFrame(loop);
+            ar.push(start - prestart);
             angle = count++ / 20;
             mat4.rotate(yRotationMatrix, identityMatrix, angle, [ 0, 1, 0 ]);
             mat4.rotate(xRotationMatrix, identityMatrix, angle / 4, [ 1, 0, 0 ]);
@@ -320,9 +323,10 @@ var CameraTest = function() {
             //    gl.clearColor(1.0, 1.0, 1.0, 1.0);
             gl.clear(gl.DEPTH_BUFFER_BIT | gl.COLOR_BUFFER_BIT);
             gl.drawElements(gl.TRIANGLES, boxIndices.length, gl.UNSIGNED_SHORT, 0);
-            var end = performance.now();
+            // var end = performance.now();
             // console.log(11111)
-            ar.push(end - start);
+                        // var start = performance.now();
+            // ar.push(start);
             if (count == 20) {
                 console.log('output', ar);
                 sender.getData(canvas, ID);
